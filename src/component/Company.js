@@ -1,18 +1,26 @@
 import React, { useContext, useState, useEffect } from "react";
 import { TitleContext } from "../context/TitleContext";
 import { CurrencyContext } from "../context/currencyContext";
+import { CountryContext } from "../context/CountryContext";
+import { ProvinceContext } from "../context/ProvinceContext";
+import { CityContext } from "../context/CityContext";
 import { Alert } from "flowbite-react";
 import Select from "react-select";
 
 const Company = () => {
   const { currency } = useContext(CurrencyContext);
   const { setTitle } = useContext(TitleContext);
+  const { country } = useContext(CountryContext);
+  const { province } = useContext(ProvinceContext);
+  const { city } = useContext(CityContext);
   const [resetSelect, setResetSelect] = useState();
   const [currencyCode, setCurrencyCode] = useState();
   const [currencyName, setCurrencyName] = useState();
-  const [country, setCountry] = useState();
   const [companyName, setCompanyName] = useState();
   const [companyAddress, setCompanyAddress] = useState();
+  const [countryValue, setCountryValue] = useState();
+  const [provinceValue, setProvinceValue] = useState();
+  const [cityValue, setCityValue] = useState();
   const [phoneNo, setPhoneNo] = useState();
   const [alert, setAlert] = useState(false);
   const [alertColor, setAlertColor] = useState("");
@@ -22,6 +30,24 @@ const Company = () => {
     ? currency.map((c) => ({
         value: c.currency_name,
         label: c.currency_code,
+      }))
+    : "";
+  const countryOptions = country
+    ? country.map((c) => ({
+        value: c.idcountry,
+        label: c.countryName,
+      }))
+    : "";
+  const provinceOptions = province
+    ? province.map((p) => ({
+        value: p.idprovince,
+        label: p.provinceName,
+      }))
+    : "";
+  const cityOptions = city
+    ? city.map((p) => ({
+        value: p.idcity,
+        label: p.cityName,
       }))
     : "";
   const style = {
@@ -38,8 +64,10 @@ const Company = () => {
       company_name: companyName,
       company_address: companyAddress,
       phone_no: phoneNo,
-      country: country,
       currency_code: currencyCode,
+      idcountry: countryValue,
+      idprovince: provinceValue,
+      idcity: cityValue,
     };
     const response = fetch("http://localhost:4000/api/company", {
       method: "POST",
@@ -68,7 +96,7 @@ const Company = () => {
           setAlertColor("failure");
           setAlertMsg(result);
         }
-        setCountry("");
+        // setCountry("");
         setPhoneNo("");
         setCompanyName("");
         setCompanyAddress("");
@@ -80,6 +108,7 @@ const Company = () => {
         }, 3000);
       })
       .catch((err) => console.log(err));
+    console.log(newCompany);
   };
   useEffect(() => {
     setTitle("Master Data");
@@ -92,7 +121,31 @@ const Company = () => {
       {alert ? (
         <Alert color={`${alertColor}`} className="mb-3">
           <span>
-            <p>{alertMsg} !</p>
+            <p className="flex items-center">
+              <svg
+                width="30"
+                height="30"
+                viewBox="0 0 30 30"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="mr-3"
+              >
+                <path
+                  d="M9.60208 13.8973L12.6447 17.0268C12.7851 17.1712 13.2064 17.2675 13.4404 17.0268C13.7026 16.7572 18.7299 11.5542 21.2108 8.98636C21.769 8.40861 22.9285 8.21602 23.6448 8.98636C24.347 9.74138 24.2066 10.7678 23.7385 11.2974L14.6107 20.6859C14.0021 21.3118 12.8319 22.1303 11.5681 20.8304C10.3642 19.5921 8.32412 17.4681 7.16801 16.2621C6.74722 15.8231 6.08326 14.7158 6.93397 13.801C7.38171 13.3195 8.33824 12.5973 9.60208 13.8973Z"
+                  fill="white"
+                />
+                <rect
+                  x="1.5"
+                  y="1.5"
+                  width="27"
+                  height="27"
+                  rx="4.5"
+                  stroke="white"
+                  stroke-width="3"
+                />
+              </svg>
+              {alertMsg} !
+            </p>
           </span>
         </Alert>
       ) : (
@@ -184,17 +237,16 @@ const Company = () => {
             >
               Country
             </label>
-            <input
-              type="text"
-              id="country"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-black focus:border-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Ex: Australia"
-              required
-              value={country}
+            <Select
+              options={countryOptions}
+              styles={style}
+              // value={resetSelect}
+              classNamePrefix="select2-selection"
               onChange={(e) => {
-                setCountry(e.target.value);
+                setCountryValue(e.value);
               }}
-            />
+              className="focus:ring-black focus:border-black"
+            ></Select>
           </div>
           <div>
             <label
@@ -211,6 +263,42 @@ const Company = () => {
               disabled
               value={currencyName}
             />
+          </div>
+          <div>
+            <label
+              for="province"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Province
+            </label>
+            <Select
+              options={provinceOptions}
+              styles={style}
+              // value={resetSelect}
+              classNamePrefix="select2-selection"
+              onChange={(e) => {
+                setProvinceValue(e.value);
+              }}
+              className="focus:ring-black focus:border-black"
+            ></Select>
+          </div>
+          <div>
+            <label
+              for="city"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              City
+            </label>
+            <Select
+              options={cityOptions}
+              styles={style}
+              // value={resetSelect}
+              classNamePrefix="select2-selection"
+              onChange={(e) => {
+                setCityValue(e.value);
+              }}
+              className="focus:ring-black focus:border-black"
+            ></Select>
           </div>
         </div>
 

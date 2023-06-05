@@ -1,26 +1,26 @@
 import React, { useState, useContext } from "react";
 import { Alert } from "flowbite-react";
-import { CurrencyContext } from "../context/currencyContext";
-const Currency = () => {
-  const { currency, setCurrency } = useContext(CurrencyContext);
-  const [currencyCode, setCurrencyCode] = useState("");
-  const [currencyName, setCurrencyName] = useState("");
+import { ProvinceContext } from "../context/ProvinceContext.js";
+
+const Province = () => {
+  const [provinceValue, setProvinceValue] = useState("");
+  const { province, setProvince } = useContext(ProvinceContext);
   const [alert, setAlert] = useState(false);
   const [alertColor, setAlertColor] = useState("");
   const [alertMsg, setAlertMsg] = useState("");
+
   const handleSubmit = async (evt) => {
     evt.preventDefault();
-    const newCurrency = {
-      currency_code: currencyCode,
-      currency_name: currencyName,
+    const newProvince = {
+      provinceName: provinceValue,
     };
-    const response = fetch("http://localhost:4000/api/currency", {
+    const response = fetch("http://localhost:4000/api/province", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        ...newCurrency,
+        ...newProvince,
       }),
     });
     response
@@ -35,15 +35,14 @@ const Currency = () => {
         setAlert(true);
         if (result.protocol41) {
           setAlertColor("success");
-          setAlertMsg("Company data successfully submitted !");
-          setCurrency([...currency, newCurrency]);
+          setAlertMsg("Province data successfully submitted !");
+          setProvince([...province, newProvince]);
         } else {
           setAlertColor("failure");
           setAlertMsg(result);
         }
 
-        setCurrencyCode("");
-        setCurrencyName("");
+        setProvinceValue("");
         setTimeout(() => {
           setAlert(false);
         }, 3000);
@@ -55,7 +54,7 @@ const Currency = () => {
     <>
       <div className="px-4 md:h-[650px] md:overflow-y-scroll">
         <div className="py-4 text-center text-[#2C4856] font-extrabold text-2xl">
-          Currency
+          Province
         </div>
         {alert ? (
           <Alert color={`${alertColor}`} className="mb-3">
@@ -95,36 +94,19 @@ const Currency = () => {
           <div class="grid gap-6 mb-6 md:grid-cols-2">
             <div>
               <label
-                for="currency-code"
+                for="province"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Currency Code
+                Province Name
               </label>
               <input
                 type="text"
-                id="currency-code"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-black focus:border-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Ex: RP"
-                required
-                value={currencyCode}
-                onChange={(e) => setCurrencyCode(e.target.value)}
-              />
-            </div>
-            <div>
-              <label
-                for="currency-name"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Currency Name
-              </label>
-              <input
-                type="text"
-                id="currency-name"
+                id="province"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-black focus:border-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
-                placeholder="Ex: Rupiah"
+                placeholder="Ex: DKI Jakarta"
                 required
-                value={currencyName}
-                onChange={(e) => setCurrencyName(e.target.value)}
+                value={provinceValue}
+                onChange={(e) => setProvinceValue(e.target.value)}
               />
             </div>
           </div>
@@ -141,4 +123,4 @@ const Currency = () => {
   );
 };
 
-export default Currency;
+export default Province;

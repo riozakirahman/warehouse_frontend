@@ -1,26 +1,26 @@
 import React, { useState, useContext } from "react";
 import { Alert } from "flowbite-react";
-import { CurrencyContext } from "../context/currencyContext";
-const Currency = () => {
-  const { currency, setCurrency } = useContext(CurrencyContext);
-  const [currencyCode, setCurrencyCode] = useState("");
-  const [currencyName, setCurrencyName] = useState("");
+import { CityContext } from "../context/CityContext.js";
+
+const City = () => {
+  const [cityValue, setCityValue] = useState("");
+  const { city, setCity } = useContext(CityContext);
   const [alert, setAlert] = useState(false);
   const [alertColor, setAlertColor] = useState("");
   const [alertMsg, setAlertMsg] = useState("");
+
   const handleSubmit = async (evt) => {
     evt.preventDefault();
-    const newCurrency = {
-      currency_code: currencyCode,
-      currency_name: currencyName,
+    const newCity = {
+      cityName: cityValue,
     };
-    const response = fetch("http://localhost:4000/api/currency", {
+    const response = fetch("http://localhost:4000/api/city", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        ...newCurrency,
+        ...newCity,
       }),
     });
     response
@@ -35,15 +35,14 @@ const Currency = () => {
         setAlert(true);
         if (result.protocol41) {
           setAlertColor("success");
-          setAlertMsg("Company data successfully submitted !");
-          setCurrency([...currency, newCurrency]);
+          setAlertMsg("City data successfully submitted !");
+          setCity([...city, newCity]);
         } else {
           setAlertColor("failure");
           setAlertMsg(result);
         }
 
-        setCurrencyCode("");
-        setCurrencyName("");
+        setCityValue("");
         setTimeout(() => {
           setAlert(false);
         }, 3000);
@@ -55,7 +54,7 @@ const Currency = () => {
     <>
       <div className="px-4 md:h-[650px] md:overflow-y-scroll">
         <div className="py-4 text-center text-[#2C4856] font-extrabold text-2xl">
-          Currency
+          City
         </div>
         {alert ? (
           <Alert color={`${alertColor}`} className="mb-3">
@@ -95,36 +94,19 @@ const Currency = () => {
           <div class="grid gap-6 mb-6 md:grid-cols-2">
             <div>
               <label
-                for="currency-code"
+                for="city"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Currency Code
+                City Name
               </label>
               <input
                 type="text"
-                id="currency-code"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-black focus:border-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Ex: RP"
-                required
-                value={currencyCode}
-                onChange={(e) => setCurrencyCode(e.target.value)}
-              />
-            </div>
-            <div>
-              <label
-                for="currency-name"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Currency Name
-              </label>
-              <input
-                type="text"
-                id="currency-name"
+                id="city"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-black focus:border-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
-                placeholder="Ex: Rupiah"
+                placeholder="Ex: Solo"
                 required
-                value={currencyName}
-                onChange={(e) => setCurrencyName(e.target.value)}
+                value={cityValue}
+                onChange={(e) => setCityValue(e.target.value)}
               />
             </div>
           </div>
@@ -141,4 +123,4 @@ const Currency = () => {
   );
 };
 
-export default Currency;
+export default City;

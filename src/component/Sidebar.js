@@ -148,15 +148,19 @@ const Sidebar = (props) => {
                       </Link>
                     </li>
                     <li>
-                      <Link className="py-2 hover:text-[#62D64F]">Country</Link>
+                      <Link className="py-2 hover:text-[#62D64F]" to="country">
+                        Country
+                      </Link>
                     </li>
                     <li>
-                      <Link className="py-2 hover:text-[#62D64F]">
+                      <Link to="province" className="py-2 hover:text-[#62D64F]">
                         Province
                       </Link>
                     </li>
                     <li>
-                      <Link className="py-2 hover:text-[#62D64F]">City</Link>
+                      <Link to="city" className="py-2 hover:text-[#62D64F]">
+                        City
+                      </Link>
                     </li>
                   </ul>
                 ) : (
