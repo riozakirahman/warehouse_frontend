@@ -8,6 +8,7 @@ const Sidebar = (props) => {
   const { setUserInfo, userInfo } = useContext(UserContext);
   const [isMenuOpen, setMenuOpen] = useState(false);
   const nav = useNavigate();
+  const sidebar = useRef();
 
   useEffect(() => {
     fetch("http://localhost:4000/api/users/profile", {
@@ -33,10 +34,11 @@ const Sidebar = (props) => {
   return (
     <>
       <div
+        ref={sidebar}
         id="sidebar"
-        className={`bg-black w-64 absolute h-screen inset-y-0 left-0 transform md:relative md:translate-x-0 transition duration-200 ${
-          !props.isOpen ? "-translate-x-full" : "translate-x-0"
-        } z-20`}
+        className={`bg-black w-64 absolute h-screen inset-y-0 left-0  md:relative md:translate-x-0 transform transition duration-200 
+        ${!props.isOpen ? "-translate-x-full" : "translate-x-0"} 
+        z-20`}
       >
         <div className="px-4 py-6 flex flex-col space-y-5  text-white">
           <nav>

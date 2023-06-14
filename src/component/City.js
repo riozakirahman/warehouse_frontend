@@ -2,6 +2,12 @@ import React, { useState, useContext } from "react";
 import { Alert } from "flowbite-react";
 import { CityContext } from "../context/CityContext.js";
 
+//theme
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+
+//core
+import "primereact/resources/primereact.min.css";
+
 const City = () => {
   const [cityValue, setCityValue] = useState("");
   const { city, setCity } = useContext(CityContext);
@@ -90,7 +96,7 @@ const City = () => {
           ""
         )}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="mb-10">
           <div class="grid gap-6 mb-6 md:grid-cols-2">
             <div>
               <label

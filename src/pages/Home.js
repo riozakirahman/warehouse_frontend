@@ -6,6 +6,12 @@ import { UserContext } from "../context/UserContext";
 import { TitleContext } from "../context/TitleContext";
 import Sidebar from "../component/Sidebar";
 import Menu from "../component/Menu";
+import { CompanyContextProvider } from "../context/CompanyContext";
+import { CurrencyContextProvider } from "../context/currencyContext";
+import { CountryContextProvider } from "../context/CountryContext";
+import { CityContextProvider } from "../context/CityContext";
+import { ProvinceContextProvider } from "../context/ProvinceContext";
+
 const Home = () => {
   const { setUserInfo, userInfo } = useContext(UserContext);
   const { setTitle } = useContext(TitleContext);
@@ -30,6 +36,7 @@ const Home = () => {
 
   function handleSidebarToggle() {
     setIsSidebarOpen(!isSidebarOpen);
+    console.log("hello");
   }
 
   if (!username) {
@@ -38,13 +45,26 @@ const Home = () => {
 
   return (
     <>
-      <div className="md:flex relative ">
-        <Sidebar isOpen={isSidebarOpen}></Sidebar>
-        <div className="w-full drop-shadow">
-          <Menu handleClick={handleSidebarToggle}></Menu>
-          <Outlet></Outlet>
-        </div>
-      </div>
+      <CompanyContextProvider>
+        <CurrencyContextProvider>
+          <CountryContextProvider>
+            <ProvinceContextProvider>
+              <CityContextProvider>
+                <div className="md:flex relative ">
+                  <Sidebar
+                    isOpen={isSidebarOpen}
+                    setIsOpen={handleSidebarToggle}
+                  ></Sidebar>
+                  <div className="w-full drop-shadow bg-gray-300">
+                    <Menu handleClick={handleSidebarToggle}></Menu>
+                    <Outlet></Outlet>
+                  </div>
+                </div>
+              </CityContextProvider>
+            </ProvinceContextProvider>
+          </CountryContextProvider>
+        </CurrencyContextProvider>
+      </CompanyContextProvider>
     </>
   );
 };

@@ -32,9 +32,6 @@ const Login = () => {
     }
   };
 
-  if (redirect) {
-    return <Navigate to="home"></Navigate>;
-  }
   if (userInfo) {
     return <Navigate to="home"></Navigate>;
   }
