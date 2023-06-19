@@ -4,7 +4,10 @@ import { Link } from "react-router-dom";
 const WarehouseList = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   return (
-    <li className="group " onClick={() => setMenuOpen(!isMenuOpen)}>
+    <li
+      className="group grow flex-auto "
+      onClick={() => setMenuOpen(!isMenuOpen)}
+    >
       <p className="flex items-center  space-x-1">
         <svg
           width="25"
@@ -53,7 +56,7 @@ const WarehouseList = () => {
         <ul className="px-10 flex flex-col space-y-2 ">
           <li>
             <Link className="py-2 hover:text-[#62D64F]" to="company">
-              Register
+              Create
             </Link>
           </li>
         </ul>

@@ -43,14 +43,14 @@ const Sidebar = (props) => {
       <div
         ref={sidebar}
         id="sidebar"
-        className={`bg-black w-64 absolute h-screen inset-y-0 left-0  md:relative md:translate-x-0 transform transition duration-200 
+        className={`bg-black w-full absolute  inset-y-0 left-0  md:relative md:translate-x-0 transform transition duration-200 
         ${!props.isOpen ? "-translate-x-full" : "translate-x-0"} 
         z-20`}
       >
-        <div className="px-4 py-6 flex flex-col space-y-5  text-white">
+        <div className="px-4 py-6 flex flex-col h-full space-y-5  text-white">
           <nav>
-            <ul>
-              <li className="group flex items-center  space-x-1">
+            <ul className="flex flex-col ">
+              <li className="group flex items-center flex-1   space-x-1">
                 <svg
                   width="25"
                   height="25"
@@ -88,8 +88,8 @@ const Sidebar = (props) => {
                   Dashboard
                 </Link>
               </li>
-              <li className="group" onClick={handleMenuOpen}>
-                <p className="flex items-center space-x-1">
+              <li className="group grow" onClick={handleMenuOpen}>
+                <p className="flex items-center  space-x-1">
                   <svg
                     width="25"
                     height="25"

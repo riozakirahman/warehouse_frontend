@@ -4,7 +4,10 @@ import { Link } from "react-router-dom";
 const TransferList = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   return (
-    <li className="group " onClick={() => setMenuOpen(!isMenuOpen)}>
+    <li
+      className="group grow flex-auto"
+      onClick={() => setMenuOpen(!isMenuOpen)}
+    >
       <p className="flex items-center  space-x-1">
         <svg
           width="24"
@@ -37,7 +40,7 @@ const TransferList = () => {
         </svg>
 
         <Link className="block py-2 px-2 hover:text-[#FFC30D]  text-[#9A9A9A]  transition duration-500  rounded-sm">
-          <p>Transfer</p> <p>Process</p> <p>Between Warehouse</p>
+          <p>Transfer Process</p> <p>Between Warehouse</p>
         </Link>
         <svg
           width="24"

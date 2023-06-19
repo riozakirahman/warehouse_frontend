@@ -4,7 +4,10 @@ import { Link } from "react-router-dom";
 const SalesProcessList = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   return (
-    <li className="group " onClick={() => setMenuOpen(!isMenuOpen)}>
+    <li
+      className="group grow flex-auto "
+      onClick={() => setMenuOpen(!isMenuOpen)}
+    >
       <p className="flex items-center  space-x-1">
         <svg
           width="25"

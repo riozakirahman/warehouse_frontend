@@ -50,11 +50,13 @@ const Home = () => {
           <CountryContextProvider>
             <ProvinceContextProvider>
               <CityContextProvider>
-                <div className="md:flex relative ">
-                  <Sidebar
-                    isOpen={isSidebarOpen}
-                    setIsOpen={handleSidebarToggle}
-                  ></Sidebar>
+                <div className="md:flex relative">
+                  <div className="h-screen w-72 overflow-y-scroll bg-black">
+                    <Sidebar
+                      isOpen={isSidebarOpen}
+                      setIsOpen={handleSidebarToggle}
+                    ></Sidebar>
+                  </div>
                   <div className="w-full drop-shadow bg-gray-300">
                     <Menu handleClick={handleSidebarToggle}></Menu>
                     <Outlet></Outlet>

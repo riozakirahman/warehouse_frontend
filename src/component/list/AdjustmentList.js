@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const AdjustmentList = () => {
   return (
     <li
-      className="group "
+      className="group grow flex-auto"
       // onClick={() => setMenuOpen(!isMenuOpen)
       // }
     >

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const StockList = () => {
   return (
     <li
-      className="group "
+      className="group grow flex-auto"
       // onClick={() => setMenuOpen(!isMenuOpen)
       // }
     >
