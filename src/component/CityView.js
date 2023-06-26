@@ -31,6 +31,7 @@ const CityView = () => {
               },
             });
           }}
+          placeholder="Search.."
         />
         <Link to="/home/addcity">
           <button
@@ -50,6 +51,8 @@ const CityView = () => {
         paginator
         rows={5}
         totalRecords={city.length}
+        removableSort
+        selectionMode="single"
       >
         <Column field="idcity" header="ID" sortable></Column>
         <Column field="cityName" header="City" sortable></Column>

@@ -7,6 +7,7 @@ import { CompanyContext } from "../context/CompanyContext";
 import { RiAddFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { TitleContext } from "../context/TitleContext";
+import "../index.css";
 
 const CompanyView = () => {
   const { setTitle } = useContext(TitleContext);
@@ -50,7 +51,8 @@ const CompanyView = () => {
         className="mt-5"
         sortMode="multiple"
         paginator
-        rows={5}
+        rows={10}
+        removableSort
         totalRecords={company.length}
       >
         <Column field="company_name" header="Company Name" sortable></Column>

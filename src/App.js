@@ -3,11 +3,6 @@ import Home from "./pages/Home";
 import Company from "./component/Company";
 import { UserContextProvider } from "./context/UserContext.js";
 import { TitleContextProvider } from "./context/TitleContext";
-import { CurrencyContextProvider } from "./context/currencyContext";
-import { CountryContextProvider } from "./context/CountryContext";
-import { ProvinceContextProvider } from "./context/ProvinceContext";
-import { CityContextProvider } from "./context/CityContext";
-import { CompanyContextProvider } from "./context/CompanyContext";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Currency from "./component/Currency";
 import Country from "./component/Country";
@@ -18,6 +13,22 @@ import CurrencyView from "./component/CurrencyView";
 import CountryView from "./component/CountryView";
 import CityView from "./component/CityView";
 import ProvinceView from "./component/ProvinceView";
+import AttributeView from "./component/AttributeView";
+import Attribute from "./component/Attribute";
+//theme
+// import "primereact/resources/themes/lara-light-blue/theme.css";
+import "./theme/theme.css";
+//core
+import "primereact/resources/primereact.min.css";
+import Uom from "./component/Uom";
+import UomView from "./component/UomView";
+import AttrValueView from "./component/AttrValueView";
+import AttrValue from "./component/AttrValue";
+import ProductView from "./component/ProductView";
+import Product from "./component/Product";
+import ProductAttributeView from "./component/ProductAttributeView";
+import ProductAttribute from "./component/ProductAttribute";
+
 function App() {
   return (
     <div className="App ">
@@ -39,6 +50,19 @@ function App() {
                   <Route path="addcountry" element={<Country />} />
                   <Route path="addcity" element={<City />} />
                   <Route path="addprovince" element={<Province />} />
+                  <Route path="uomview" element={<UomView />} />
+                  <Route path="adduom" element={<Uom />} />
+                  <Route path="attributeview" element={<AttributeView />} />
+                  <Route path="addattribute" element={<Attribute />} />
+                  <Route path="attrvalueview" element={<AttrValueView />} />
+                  <Route path="addattrvalue" element={<AttrValue />} />
+                  <Route path="productview" element={<ProductView />} />
+                  <Route path="addproduct" element={<Product />} />
+                  <Route
+                    path="productattrview"
+                    element={<ProductAttributeView />}
+                  />
+                  <Route path="addproductattr" element={<ProductAttribute />} />
                 </Route>
               </Route>
             </Routes>

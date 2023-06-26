@@ -61,13 +61,34 @@ const ProductList = () => {
       {isMenuOpen ? (
         <ul className="px-10 flex flex-col space-y-2 ">
           <li>
-            <Link className="py-2 hover:text-[#62D64F]" to="company">
+            <Link className="py-2 hover:text-[#62D64F]" to="productview">
+              Product
+            </Link>
+          </li>
+          <li>
+            <Link className="py-2 hover:text-[#62D64F]" to="attributeview">
               Attribute
             </Link>
           </li>
           <li>
-            <Link className="py-2 hover:text-[#62D64F]" to="company">
+            <Link className="py-2 hover:text-[#62D64F]" to="attrvalueview">
+              Attribute Value
+            </Link>
+          </li>
+          <li>
+            <Link className="py-2 hover:text-[#62D64F]" to="productattrview">
+              Product Attribute
+            </Link>
+          </li>
+
+          <li>
+            <Link className="py-2 hover:text-[#62D64F]" to="uomview">
               UOM
+            </Link>
+          </li>
+          <li>
+            <Link className="py-2 hover:text-[#62D64F]" to="company">
+              Product Unit Conversion
             </Link>
           </li>
         </ul>

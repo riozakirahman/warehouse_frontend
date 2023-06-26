@@ -31,6 +31,7 @@ const ProvinceView = () => {
               },
             });
           }}
+          placeholder="Search.."
         />
         <Link to="/home/addprovince">
           <button
@@ -49,6 +50,7 @@ const ProvinceView = () => {
         sortMode="multiple"
         paginator
         rows={5}
+        removableSort
         totalRecords={province.length}
       >
         <Column field="idprovince" header="ID" sortable></Column>

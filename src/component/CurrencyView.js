@@ -30,6 +30,7 @@ const CurrencyView = () => {
               },
             });
           }}
+          placeholder="Search.."
         />
         <Link to="/home/addcurrency">
           <button
@@ -48,6 +49,7 @@ const CurrencyView = () => {
         sortMode="multiple"
         paginator
         rows={5}
+        removableSort
         totalRecords={currency.length}
       >
         <Column field="currency_code" header="Currency Code" sortable></Column>
