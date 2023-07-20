@@ -1,40 +1,37 @@
 import React, { useState, useContext, useEffect } from "react";
-import { AdjustmentContext } from "../context/AdjustmentContext.js";
+import { TitleContext } from "../context/TitleContext.js";
 import { DataTable } from "primereact/datatable";
-import { Alert } from "flowbite-react";
 import { Column } from "primereact/column";
+import { Alert } from "flowbite-react";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 import { RiAddFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import { TitleContext } from "../context/TitleContext.js";
+import { VendorContext } from "../context/VendorContext.js";
+import VendorPopup from "./VendorPopup.js";
 
-import AdjustmentPopup from "./AdjustmentPopup.js";
-
-const AdjustmentView = () => {
+const VendorView = () => {
+  useEffect(() => {
+    setTitle("Vendor");
+  });
   const [selected, setSelected] = useState("");
   const [open, setOpen] = useState(false);
   const [alert, setAlert] = useState(false);
   const [alertColor, setAlertColor] = useState("");
   const [alertMsg, setAlertMsg] = useState("");
-
-  useEffect(() => {
-    setTitle("Adjustment");
-  });
-
   const { setTitle } = useContext(TitleContext);
-  const { adjustment } = useContext(AdjustmentContext);
+  const { vendor } = useContext(VendorContext);
   const [filter, setFilter] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
   return (
     <div className="px-4 py-4">
       {open && (
-        <AdjustmentPopup
+        <VendorPopup
           data={selected}
+          setSelected={setSelected}
           setOpen={setOpen}
           open={open}
-          setSelected={setSelected}
           setAlert={setAlert}
           setAlertColor={setAlertColor}
           setAlertMsg={setAlertMsg}
@@ -73,7 +70,6 @@ const AdjustmentView = () => {
       ) : (
         ""
       )}
-
       <div className="flex justify-between ">
         <InputText
           onInput={(e) => {
@@ -87,7 +83,7 @@ const AdjustmentView = () => {
           }}
           placeholder="Search.."
         />
-        <Link to="/home/addadjustment">
+        <Link to="/home/addvendor">
           <button
             type="button"
             className="text-[#2C4856] bg-[#ffff] hover:bg-[#d7d6d6] focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
@@ -98,43 +94,39 @@ const AdjustmentView = () => {
       </div>
 
       <DataTable
-        value={adjustment}
+        value={vendor}
         filters={filter}
         className="mt-5"
         sortMode="multiple"
         paginator
         rows={5}
-        totalRecords={adjustment.length}
+        totalRecords={vendor.length}
         removableSort
         selectionMode="single"
-        dataKey="idadjustment"
+        dataKey="idvendor"
         selection={selected}
         onSelectionChange={(e) => {
           setSelected(e.value);
         }}
         onDoubleClick={() => setOpen(!open)}
       >
-        <Column field="idadjustment" header="ID" sortable></Column>
-        <Column field="warehouse_name" header="Warehouse" sortable></Column>
-        <Column field="product" header="Product" sortable></Column>
-        <Column field="code" header="Code" sortable></Column>
-        <Column field="uom" header="UOM" sortable></Column>
+        <Column field="idvendor" header="ID" sortable></Column>
+        <Column field="vendor_name" header="Vendor" sortable></Column>
+        <Column field="address" header="Address" sortable></Column>
         <Column
-          field="adjustment_qty"
-          header="Qty Adjustment"
+          field="contact_person"
+          header="Contact Person"
           sortable
         ></Column>
-        <Column field="idstock" header="idstock" sortable hidden></Column>
-        <Column field="idwarehouse" header="idstock" sortable hidden></Column>
         <Column
-          field="idproductUnitConversion"
-          header="idstock"
+          field="contact_number"
+          header="Contact Number"
           sortable
-          hidden
         ></Column>
+        <Column field="email" header="Email" sortable></Column>
       </DataTable>
     </div>
   );
 };
 
-export default AdjustmentView;
+export default VendorView;

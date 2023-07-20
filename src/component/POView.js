@@ -1,17 +1,17 @@
 import React, { useState, useContext, useEffect } from "react";
-import { AdjustmentContext } from "../context/AdjustmentContext.js";
 import { DataTable } from "primereact/datatable";
-import { Alert } from "flowbite-react";
+import { Alert, Button } from "flowbite-react";
 import { Column } from "primereact/column";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 import { RiAddFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { TitleContext } from "../context/TitleContext.js";
+import { POContext } from "../context/PoContext.js";
+import { Tag } from "primereact/tag";
+import POPopup from "./POPopup.js";
 
-import AdjustmentPopup from "./AdjustmentPopup.js";
-
-const AdjustmentView = () => {
+const POView = () => {
   const [selected, setSelected] = useState("");
   const [open, setOpen] = useState(false);
   const [alert, setAlert] = useState(false);
@@ -19,18 +19,35 @@ const AdjustmentView = () => {
   const [alertMsg, setAlertMsg] = useState("");
 
   useEffect(() => {
-    setTitle("Adjustment");
+    setTitle("Purchase Order");
   });
 
   const { setTitle } = useContext(TitleContext);
-  const { adjustment } = useContext(AdjustmentContext);
+  const { po } = useContext(POContext);
   const [filter, setFilter] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
+  const statusBodyTemplate = (po) => {
+    return <Tag value={po.status} severity={getSeverity(po)}></Tag>;
+  };
+
+  const getSeverity = (po) => {
+    switch (po.status) {
+      case "Done":
+        return "success";
+
+      case "Waiting":
+        return "warning";
+
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="px-4 py-4">
       {open && (
-        <AdjustmentPopup
+        <POPopup
           data={selected}
           setOpen={setOpen}
           open={open}
@@ -87,7 +104,7 @@ const AdjustmentView = () => {
           }}
           placeholder="Search.."
         />
-        <Link to="/home/addadjustment">
+        <Link to="/home/addpo">
           <button
             type="button"
             className="text-[#2C4856] bg-[#ffff] hover:bg-[#d7d6d6] focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
@@ -98,43 +115,36 @@ const AdjustmentView = () => {
       </div>
 
       <DataTable
-        value={adjustment}
+        value={po}
         filters={filter}
         className="mt-5"
         sortMode="multiple"
         paginator
         rows={5}
-        totalRecords={adjustment.length}
+        totalRecords={po.length}
         removableSort
         selectionMode="single"
-        dataKey="idadjustment"
+        dataKey="idpurchase_order"
         selection={selected}
         onSelectionChange={(e) => {
           setSelected(e.value);
         }}
         onDoubleClick={() => setOpen(!open)}
       >
-        <Column field="idadjustment" header="ID" sortable></Column>
+        <Column field="idpurchase_order" header="ID" sortable></Column>
+        <Column body={statusBodyTemplate} header="Status" sortable></Column>
         <Column field="warehouse_name" header="Warehouse" sortable></Column>
         <Column field="product" header="Product" sortable></Column>
         <Column field="code" header="Code" sortable></Column>
         <Column field="uom" header="UOM" sortable></Column>
-        <Column
-          field="adjustment_qty"
-          header="Qty Adjustment"
-          sortable
-        ></Column>
+        <Column field="vendor_name" header="Vendor" sortable></Column>
+        <Column field="quantity" header="Qty" sortable></Column>
+        <Column field="price" header="Price" sortable></Column>
+        <Column field="total" header="Total" sortable></Column>
         <Column field="idstock" header="idstock" sortable hidden></Column>
-        <Column field="idwarehouse" header="idstock" sortable hidden></Column>
-        <Column
-          field="idproductUnitConversion"
-          header="idstock"
-          sortable
-          hidden
-        ></Column>
       </DataTable>
     </div>
   );
 };
 
-export default AdjustmentView;
+export default POView;

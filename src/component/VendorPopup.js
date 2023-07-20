@@ -1,35 +1,34 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
+import { AdjustmentContext } from "../context/AdjustmentContext";
 import { StockContext } from "../context/StockContext";
-import { WarehouseContext } from "../context/WarehouseContext";
 import { Button } from "primereact/button";
-import Select from "react-select";
+import { VendorContext } from "../context/VendorContext";
 
-const StockPopup = ({
+const VendorPopup = ({
   data,
   setOpen,
   open,
+  setSelected,
   setAlert,
   setAlertMsg,
   setAlertColor,
 }) => {
-  const { stock, setStock } = useContext(StockContext);
-  const { warehouse } = useContext(WarehouseContext);
-  const [idwarehouse, setIdWarehouse] = useState(data.idwarehouse);
-  const [warehouseName, setWarehouseName] = useState(data.warehouse_name);
-  const [qty, setQty] = useState(data.qty);
+  const { vendor, setVendor } = useContext(VendorContext);
+  const [vendor_name, setVendorName] = useState(data.vendor_name);
+  const [address, setAddress] = useState(data.address);
+  const [contact_person, setCP] = useState(data.contact_person);
+  const [contact_number, setCN] = useState(data.contact_number);
+  const [email, setEmail] = useState(data.email);
+
   const popup = useRef();
 
-  const options_warehouse = warehouse
-    ? warehouse.map((c) => ({
-        value: c.idwarehouse,
-        label: c.warehouse_name,
-      }))
-    : "";
-
   const handleDelete = () => {
-    const response = fetch(`http://localhost:4000/api/stock/${data.idstock}`, {
-      method: "DELETE",
-    })
+    const response = fetch(
+      `http://localhost:4000/api/vendor/${data.idvendor}`,
+      {
+        method: "DELETE",
+      }
+    )
       .then((res) => {
         if (!res.ok) {
           return Promise.reject(`Error: ${res.status}`);
@@ -41,10 +40,10 @@ const StockPopup = ({
           setAlertColor("success");
           setAlertMsg("Stock data successfully deleted !");
           setAlert(true);
-          const newStock = stock.filter(
-            (item) => item.idstock !== data.idstock
+          const newVendor = vendor.filter(
+            (item) => item.idvendor !== data.idvendor
           );
-          setStock(newStock);
+          setVendor(newVendor);
           setOpen(!open);
           setTimeout(() => {
             setAlert(false);
@@ -62,57 +61,55 @@ const StockPopup = ({
   };
   const handleUpdate = async () => {
     const response = await fetch(
-      `http://localhost:4000/api/stock/${data.idstock}`,
+      `http://localhost:4000/api/vendor/${data.idvendor}`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          idwarehouse: idwarehouse,
-          idproductUnitConversion: data.idproductUnitConversion,
-          qty: parseInt(qty),
+          vendor_name,
+          address,
+          contact_person,
+          contact_number,
+          email,
         }),
       }
-    )
-      .then((res) => {
-        if (!res.ok) {
-          return Promise.reject(`Error: ${res.status}`);
+    );
+
+    const res = await response.json();
+    if (response.ok) {
+      const newVendor = vendor.map((u) => {
+        if (u.idvendor === data.idvendor) {
+          return {
+            idvendor: data.idvendor,
+            vendor_name,
+            address,
+            contact_person,
+            contact_number,
+            email,
+          };
         }
-        return res.json();
-      })
-      .then((res) => {
-        if (res.protocol41) {
-          setAlertColor("success");
-          setAlertMsg("Stock data successfully updated !");
-          setAlert(true);
-          const newStock = stock.map((u) => {
-            if (u.idstock === data.idstock) {
-              return {
-                idstock: data.idstock,
-                idwarehouse: idwarehouse,
-                warehouse_name: warehouseName,
-                idproductUnitConversion: data.idproductUnitConversion,
-                iduom: data.iduom,
-                uom: data.uom,
-                idproduct: data.idproduct,
-                code: data.code,
-                product: data.product,
-                qty: qty,
-              };
-            }
-            return u;
-          });
-          setStock(newStock);
-          setOpen(!open);
-          setTimeout(() => {
-            setAlert(false);
-          }, 3000);
-        } else {
-          setAlertColor("failure");
-          setAlertMsg(res);
-        }
+        return u;
       });
+      setVendor(newVendor);
+      setSelected("");
+      setOpen(!open);
+      setAlertColor("success");
+      setAlertMsg("Vendor data successfully updated !");
+      setAlert(true);
+      setTimeout(() => {
+        setAlert(false);
+      }, 3000);
+    } else {
+      setOpen(!open);
+      setAlert(true);
+      setAlertColor("failure");
+      setAlertMsg(res);
+      setTimeout(() => {
+        setAlert(false);
+      }, 3000);
+    }
   };
   useEffect(() => {
     const handleClick = (e) => {
@@ -148,14 +145,14 @@ const StockPopup = ({
             for="name"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            ID Stock
+            ID Vendor
           </label>
           <input
             type="text"
             id="name"
             class="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-black focus:border-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required
-            value={data.idstock}
+            value={data.idvendor}
             disabled
           />
         </div>
@@ -164,37 +161,35 @@ const StockPopup = ({
             for="warehouse"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Warehouse
+            Vendor
           </label>
-          <Select
-            id="warehouse"
-            options={options_warehouse}
-            classNamePrefix="select2-selection"
-            onChange={(e) => {
-              setWarehouseName(e.label);
-              setIdWarehouse(e.value);
-            }}
+          <input
+            type="text"
+            id="name"
+            class="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-black focus:border-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required
-            defaultValue={options_warehouse.find(
-              (option) => option.value == data.idwarehouse
-            )}
-            className="focus:ring-black focus:border-black"
-          ></Select>
+            value={vendor_name}
+            onChange={(e) => {
+              setVendorName(e.target.value);
+            }}
+          />
         </div>
         <div>
           <label
             for="product"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Product
+            Address
           </label>
           <input
             type="text"
             id="product"
-            disabled
             class="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-black focus:border-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required
-            value={data.product}
+            value={address}
+            onChange={(e) => {
+              setAddress(e.target.value);
+            }}
           />
         </div>
         <div>
@@ -202,15 +197,17 @@ const StockPopup = ({
             for="code"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Code
+            Contact Person
           </label>
           <input
             type="text"
             id="code"
-            disabled
             class="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-black focus:border-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required
-            value={data.code}
+            value={contact_person}
+            onChange={(e) => {
+              setCP(e.target.value);
+            }}
           />
         </div>
         <div>
@@ -218,35 +215,38 @@ const StockPopup = ({
             for="uom"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            UOM
+            Contact Number
           </label>
           <input
             type="text"
             id="uom"
-            disabled
             class="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-black focus:border-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required
-            value={data.uom}
+            value={contact_number}
+            onChange={(e) => {
+              setCN(e.target.value);
+            }}
           />
         </div>
         <div>
           <label
-            for="qty"
+            for="email"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Qty
+            Email
           </label>
           <input
             type="text"
-            id="qty"
+            id="email"
             class="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-black focus:border-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required
-            value={qty}
+            value={email}
             onChange={(e) => {
-              setQty(e.target.value);
+              setEmail(e.target.value);
             }}
           />
         </div>
+
         <div className="flex flex-start gap-4 mt-3">
           <Button
             label="Delete"
@@ -258,7 +258,14 @@ const StockPopup = ({
             label="Update"
             severity="success"
             size="small"
-            disabled={!qty && true}
+            disabled={
+              (!vendor_name ||
+                !address ||
+                !email ||
+                !contact_number ||
+                !contact_person) &&
+              true
+            }
             onClick={handleUpdate}
           />
         </div>
@@ -267,4 +274,4 @@ const StockPopup = ({
   );
 };
 
-export default StockPopup;
+export default VendorPopup;
