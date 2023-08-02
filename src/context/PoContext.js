@@ -6,11 +6,13 @@ export function POContextProvider({ children }) {
   const [po, setPO] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/po")
-      .then((res) => {
-        return res.json();
-      })
-      .then((result) => setPO(result));
+    try {
+      fetch("http://localhost:4000/api/po")
+        .then((res) => {
+          return res.json();
+        })
+        .then((result) => setPO(result));
+    } catch (error) {}
   }, []);
 
   return (
