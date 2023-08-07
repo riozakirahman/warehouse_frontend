@@ -1,6 +1,9 @@
 import React, { useState, useContext } from "react";
 import { Alert } from "flowbite-react";
 import { CityContext } from "../context/CityContext.js";
+import { UserContext } from "../context/UserContext";
+import { BiArrowBack } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 
 const City = () => {
   const [cityValue, setCityValue] = useState("");
@@ -8,11 +11,20 @@ const City = () => {
   const [alert, setAlert] = useState(false);
   const [alertColor, setAlertColor] = useState("");
   const [alertMsg, setAlertMsg] = useState("");
+  const { userInfo } = useContext(UserContext);
+  const username = userInfo?.username;
+
+  const history = useNavigate();
+
+  const goBack = () => {
+    history(-1);
+  };
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
     const newCity = {
       cityName: cityValue,
+      created_by: username,
     };
     const response = fetch("http://localhost:4000/api/city", {
       method: "POST",
@@ -31,12 +43,19 @@ const City = () => {
         return res.json();
       })
       .then((result) => {
-        console.log(result);
+        const id = result["insertId"];
+        fetch(`http://localhost:4000/api/city/${id}`)
+          .then((res) => {
+            return res.json();
+          })
+          .then((result) => {
+            console.log(result);
+            setCity([...city, ...result]);
+          });
         setAlert(true);
         if (result.protocol41) {
           setAlertColor("success");
           setAlertMsg("City data successfully submitted !");
-          setCity([...city, newCity]);
         } else {
           setAlertColor("failure");
           setAlertMsg(result);
@@ -53,6 +72,12 @@ const City = () => {
   return (
     <>
       <div className="px-4 md:h-[650px] md:overflow-y-scroll">
+        <span className="py-3 block cursor-pointer " onClick={goBack}>
+          <BiArrowBack
+            className="w-12 h-12 bg-[#ffff] hover:bg-[#d7d6d6] rounded-full p-3
+        "
+          />
+        </span>
         <div className="py-4 text-center text-[#2C4856] font-extrabold text-2xl">
           City
         </div>
